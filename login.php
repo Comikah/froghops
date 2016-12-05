@@ -1,6 +1,8 @@
 <?php
 session_start();
-$pdo = new PDO('mars.iuk.hdm-stuttgart.de', 'u-sd103', 'sd103', 'ooshe9OhNi');
+$dsn = "mysql:: host=mars.iuk.hdm-stuttgart.de; dbname=u-sd103";
+
+$pdo = new PDO($dsn, 'sd103', 'ooshe9OhNi', array('charset'=>'utf8'));
 
 if(isset($_GET['login'])) {
     $email = $_POST['email'];
