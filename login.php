@@ -46,5 +46,8 @@ if(isset($errorMessage)) {
     <p> Noch nicht <a href="registrieren.php">registriert</a>?</p>
     <p>  <a href="passwortvergessen.php">Passwort vergessen?</a>?</p>
 </form>
+
+<p> Hallo ok tschau </p>
+<p> dwadffawfwadH</p>
 </body>
 </html>
