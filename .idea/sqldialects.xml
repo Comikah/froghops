@@ -3,6 +3,9 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/dashboard.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/login.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/passwortaendern.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/passwortvergessen.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/passwortzuruecksetzen.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/registrieren.php" dialect="MySQL" />
   </component>
 </project>

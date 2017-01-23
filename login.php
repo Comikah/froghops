@@ -1,8 +1,7 @@
 <?php
 session_start();
-$dsn = "mysql:: host=mars.iuk.hdm-stuttgart.de; dbname=u-sd103";
 
-$pdo = new PDO($dsn, 'sd103', 'ooshe9OhNi', array('charset'=>'utf8'));
+include_once("userdata.php");
 
 if(isset($_GET['login'])) {
     $email = $_POST['email'];
@@ -15,7 +14,7 @@ if(isset($_GET['login'])) {
     //Überprüfung des Passworts
     if ($user !== false && password_verify($passwort, $user['passwort'])) {
         $_SESSION['userid'] = $user['user_id'];
-        die('Login erfolgreich. Weiter zu <a href="dashboard.php">internen Bereich</a>');
+        die('Login erfolgreich. Weiter zu <a href="dashboard.php">internem Bereich</a>');
     } else {
         $errorMessage = "E-Mail oder Passwort war ungültig<br>";
     }
@@ -35,7 +34,7 @@ if(isset($errorMessage)) {
 }
 ?>
 
-<form action="?login=1" method="post">
+<form action="login.php?login=1" method="post">
     E-Mail:<br>
     <input type="email" size="40" maxlength="250" name="email"><br><br>
 
@@ -45,6 +44,7 @@ if(isset($errorMessage)) {
     <input type="submit" value="Anmelden">
 
     <p> Noch nicht <a href="registrieren.php">registriert</a>?</p>
+    <p>  <a href="passwortvergessen.php">Passwort vergessen?</a>?</p>
 </form>
 </body>
 </html>
