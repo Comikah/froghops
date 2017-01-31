@@ -83,6 +83,8 @@ if($showForm):
         <input type="submit" value="Neues Passwort">
     </form>
 
+    <p> Ist dir das Passwort wieder eingefallen? <a href="login.php"> Login </a>?</p>
+
     <?php
 endif; //Endif von if($showForm)
 ?>
