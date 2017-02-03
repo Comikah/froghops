@@ -72,8 +72,8 @@ if($showForm):
 	<h1>Kontakt <img src="brief.png" alt="Brief" width="80" height="50"></h1>
 	<label for="vorname"> Vorname: </label>
 	<input type="text" id="vorname" name="vorname">
-	<!--<label for="nachname"> </label>
-	<input type="text" id="nachname" name="nachname"> <br> <br> -->
+	<label for="nachname"> </label>
+	<input type="text" id="nachname" name="nachname"> <br> <br>
 	<label for="Mail"> E-Mail-Adresse: </label>
 	<input type="text" id="mail" name="mail"> <br> <br>
 	<label for="Betreff"> Betreff: </label>
