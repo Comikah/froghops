@@ -1,9 +1,12 @@
+
+
 <?php
 session_start();
 include_once("userdata.php");
 
 if(!isset($_SESSION['userid'])) {
-    die('Bitte zuerst <a href="login.php">einloggen</a>!');
+    header('Location: login.php');
+    // die('Bitte zuerst <a href="login.php">einloggen</a>!');
 }
 
 //Abfrage der Nutzer ID vom Login
@@ -18,12 +21,13 @@ echo "Hallo User: ".$userid;
 
 
 
+
 if ( $_FILES['uploaddatei']['name']  <> "" )
 {
     // Datei wurde durch HTML-Formular hochgeladen
     // und kann nun weiterverarbeitet werden
 
-    // Kontrolle, ob Dateityp zulässig ist
+    // Dateitypen definieren und Kontrolle, ob Dateityp zulässig ist
     $zugelassenedateitypen = array("image/png", "image/jpeg", "image/gif" , "application/pdf" , "application/msword",
         "application/mspowerpoint", "application/msexcel", "application/");
 
@@ -36,15 +40,32 @@ if ( $_FILES['uploaddatei']['name']  <> "" )
         // Test ob Dateiname in Ordnung
         $_FILES['uploaddatei']['name'] = dateiname_bereinigen($_FILES['uploaddatei']['name']);
 
+
+        // File Name wird gehasht und in $new_filename gespeichert
+        $file_extension = "." . pathinfo($_FILES['uploaddatei']['name'], PATHINFO_EXTENSION);
+        $new_filename = md5($_FILES['uploaddatei']['name'] . time() . $_FILES['uploaddatei']['size']). $file_extension;
+
+
+        // Wenn Dateiname zulässig ist, wird sie auf den Server und in die DB hochgeladen
         if ( $_FILES['uploaddatei']['name'] <> '' )
         {
             move_uploaded_file (
                 $_FILES['uploaddatei']['tmp_name'] ,
-                'hochgeladenes/'. $_FILES['uploaddatei']['name'] ); //uploaddatei statt dashboard
+                'hochgeladenes/files/'. $new_filename );
+                // $_FILES['uploaddatei']['tmp_name'] ,
+                // 'hochgeladenes/files/'. $_FILES['uploaddatei']['name'] );
 
+            //Neue Datei in Datenbank hochladen
+            $sql= "INSERT INTO uploads (user_id, original_name, datei_name, groesse, datei_typ)
+            VALUES ('" . $userid . "','" . ($_FILES['uploaddatei']['name']) . "','" . $new_filename. "','" . ($_FILES['uploaddatei']['size']) . "','" . $file_extension . "' )";
+            $statement = $pdo->prepare($sql);
+            $result = $statement->execute();
+
+        // Ausgeben des $_FILES Inhalt, bzw. hochgeladenen Inhalts
             echo "<p>Hochladen war erfolgreich: ";
-            echo '<a href="hochgeladenes/'. $_FILES['uploaddatei']['name'] .'">'; //uploaddatei statt dashboard
-            echo 'hochgeladenes/'. $_FILES['uploaddatei']['name']; //uploaddatei statt dashboard
+            echo '<a href="hochgeladenes/files/'. $_FILES['uploaddatei']['name'] .'">';
+            echo 'hochgeladenes/files/'. $_FILES['uploaddatei']['name']." / ". $_FILES['uploaddatei']['type'].
+                " / ". $_FILES['uploaddatei']['size']; // (Evtl. mit STRIPTEMPNAME FÜR HASHCODE IM LINK!!)
             echo '</a>';
         }
         else
@@ -54,11 +75,11 @@ if ( $_FILES['uploaddatei']['name']  <> "" )
     }
 }
 
+
 function dateiname_bereinigen($dateiname)
 {
-    // erwünschte Zeichen erhalten bzw. umschreiben
-    // aus allen ä wird ae, ü -> ue, ß -> ss (je nach Sprache mehr Aufwand)
-    // und sonst noch ein paar Dinge (ist schätzungsweise mein persönlicher Geschmach ;)
+    // Zeichen umschreiben, aus allen ä wird ae, ü -> ue, ß -> ss (je nach Sprache mehr Aufwand)
+
     $dateiname = strtolower ( $dateiname );
     $dateiname = str_replace ('"', "-", $dateiname );
     $dateiname = str_replace ("'", "-", $dateiname );
@@ -89,10 +110,11 @@ function dateiname_bereinigen($dateiname)
     $dateiname = str_replace (",", "-", $dateiname );
     $dateiname = str_replace ("--", "-", $dateiname );
 
-    // und nun jagen wir noch die Heilfunktion darüber
+    // Heilfunktion
     $dateiname = filter_var($dateiname, FILTER_SANITIZE_URL);
     return ($dateiname);
 }
+
 ?>
 
 <html>
@@ -102,16 +124,17 @@ function dateiname_bereinigen($dateiname)
     <input type="Submit" name="submit" value="Datei hochladen">
 </form>
 
+
 <!-- Ab hier die Dateienliste-->
 <h1>Dateienliste</h1>
 <ul>
     <?php
 
-    $ordner = "/home/sd103/public_html/hochgeladenes"; //Pfad, wo die Datein sind, hier müsste also
+    $ordner = "/home/sd103/public_html/hochgeladenes/files/"; //Pfad, wo die Datein sind, hier müsste also
     // Verbindung mit der Datenbank hergestellt werden
 
 
-    $alledateien = scandir($ordner); // Sortierung A-Z
+    $alledateien = scandir($ordner); // Sortierung A-Z / Dateien in Ordner werden in Variable gespeichert
 
     foreach ($alledateien as $datei) {
 
