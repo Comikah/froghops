@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Impressum</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
-    </script>
-
-    <!-- Bootstrap -->
-    <!-- Das neueste kompilierte und minimierte CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-    <!-- Optionales Theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
-    <!-- Das neueste kompilierte und minimierte JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+<?php
+include("head.php")
+?>
 
     <style type="text/css">
 
@@ -27,47 +12,26 @@
             padding-left: 170px;
 
         }
-        #hallo{
+        #hintergrund_login{
             width: 50px;
             height: 50px;
             position: fixed;
-            top:0px;
+            top:0;
         }
 
     </style>
+<body>
 
+<?php
 
-</head>
+include("dashboard_header.php");
 
-
-<body data-spy="scroll" data-target="#navbar-example">
-
-<div class="container">
-
-    <nav id="navbar-example" class="navbar navbar-default navbar-fixed-top">
-
-        <div class="navbar-header">
-            <a class="navbar-brand" href="login.php">
-                <img id="hallo" alt="Titel" src="images.jpeg">
-            </a>
-        </div>
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item"><a class="nav-link active" href="#impressum">Impressum</a></li>
-            <li class="nav-item"><a class="nav-link" href="#haftungshinweis">Haftungshinweis</a></li>
-
-            <li class="nav-item"><a class="nav-link" href="#datenschutz">Datenschutz</a></li>
-
-            <li class="nav-item"><a class="nav-link" href="#copyright">Copyright</a></li>
-
-        </ul>
-    </nav>
-</div>
-
+?>
 
 <div class="container">
 
 
-    <h2 id="impressum">  <br> <br> Impressum</h2>
+    <h2> Impressum</h2>
 
     <div>
         Frog Drops <br>
@@ -90,7 +54,7 @@
     <br>
     <br>
 
-    <h2 id="haftungshinweis">Haftungshinweis</h2>
+    <h2>Haftungshinweis</h2>
 
     <div>
         Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links.<br>
@@ -109,7 +73,7 @@
     <br>
 
 
-    <h2 id="datenschutz">Datenschutz</h2>
+    <h2>Datenschutz</h2>
 
     <div>
         Frog Drops achtet die Privatsphäre der Nutzer und hält alle anwendbaren Datenschutzbestimmungen ein. <br>
@@ -122,7 +86,7 @@
     <br>
     <br>
 
-    <h2 id="copyright">Copyright</h2>
+    <h2>Copyright</h2>
 
     <div>
         Das Layout sowie alle Inhalte (Bilder, Texte, Grafiken, Logos, Audio- und Videodateien) der Frog Drops Website
@@ -139,7 +103,9 @@
 
 
 
-
+<?php
+include("footer.php");
+?>
 
 </body>
 </html>

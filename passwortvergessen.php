@@ -1,5 +1,6 @@
 <?php
-include_once("userdata.php");
+
+include("login_header.php");
 
 function random_string() {
     if(function_exists('random_bytes')) {
@@ -35,15 +36,11 @@ if(isset($_GET['send']) ) {
             $passwortcode = random_string();
             $statement = $pdo->prepare("UPDATE users SET passwortcode = :passwortcode, passwortcode_time = NOW() WHERE user_id = :userid");
 
-            $result = $statement->execute(array(':passwortcode' => $passwortcode, ':userid' => $user['user_id'])); //(sha1(passwortcode))
-            print_r($statement->errorInfo());
+            $result = $statement->execute(array(':passwortcode' => $passwortcode, ':userid' => $user['user_id']));
+            //print_r($statement->errorInfo());
             echo "DB -Passcode ".$passwortcode." userid ".$user['user_id'];
 
-            /*
-             *         $statement = $pdo->prepare("UPDATE users SET passwort = :passworthash, passwortcode = NULL, passwortcode_time = NULL WHERE user_id = :userid");
-        $result = $statement->execute(array('passworthash' => $passworthash, 'userid'=> $userid ));
-             * */
-//statt id = user_id am Ende von $result
+
             $empfaenger = $user['email'];
             $betreff = "Neues Passwort für deinen Account auf Frog Drops";
             $from = "From: Stephen Duscher <ste.duscher@googlemail.com>";
@@ -71,11 +68,6 @@ if($showForm):
     <h1>Passwort vergessen</h1>
     Gib hier deine E-Mail-Adresse ein, um ein neues Passwort anzufordern.<br><br>
 
-    <?php
-    if(isset($error) && !empty($error)) {
-        echo $error;
-    }
-    ?>
 
     <form action="passwortvergessen.php?send=1" method="post">
         E-Mail:<br>
@@ -83,8 +75,17 @@ if($showForm):
         <input type="submit" value="Neues Passwort">
     </form>
 
-    <p> Ist dir das Passwort wieder eingefallen? <a href="login.php"> Login </a>?</p>
 
     <?php
+    if(isset($error) && !empty($error)) {
+        echo $error;
+    }
+
 endif; //Endif von if($showForm)
-?>
+
+   include("footer.php");
+    ?>
+
+
+</body>
+</html>

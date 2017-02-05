@@ -1,23 +1,23 @@
 <?php
-include_once("userdata.php");
+include("login_header.php");
 
 if(!isset($_GET['userid']) || !isset($_GET['code'])) {
     die("Leider wurde beim Aufruf dieser Website kein Code zum Zurücksetzen deines Passworts übermittelt");
 }
 
-$userid = $_GET['userid']; //userid zu user_id
+$userid = $_GET['userid'];
 $code = $_GET['code'];
 
 //Abfrage des Nutzers
 $statement = $pdo->prepare("SELECT * FROM users WHERE user_id = :userid");
-$result = $statement->execute(array('userid' => $userid)); //userid = user_id
+$result = $statement->execute(array('userid' => $userid));
 $user = $statement->fetch();
 
 
 
-echo "user:".$userid;
-echo "code:".$user['passwortcode'];
-echo "Code vergleich:"."   ".$code."  ".$user['passwortcode'];
+//echo "user:".$userid;
+//echo "code:".$user['passwortcode'];
+//echo "Code vergleich:"."   ".$code."  ".$user['passwortcode'];
 
 //Überprüfe dass ein Nutzer gefunden wurde und dieser auch ein Passwortcode hat
 if($userid == null || $user['passwortcode'] == null) {
@@ -68,3 +68,10 @@ if(isset($_GET['send'])) {
 
     <input type="submit" value="Passwort speichern">
 </form>
+
+<?php
+include("footer.php");
+?>
+
+</body>
+</html>
