@@ -1,5 +1,14 @@
+<html lang="de">
+<head>
+
+    <?php
+    include("head.php");
+    ?>
+</head>
+<body id="login" data-spy="scroll" data-target="#navbar">
+
 <?php
-include("login_header.php");
+include("header.php");
 
 if(!isset($_GET['userid']) || !isset($_GET['code'])) {
     die("Leider wurde beim Aufruf dieser Website kein Code zum Zurücksetzen deines Passworts übermittelt");

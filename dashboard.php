@@ -1,31 +1,195 @@
+<html lang="de">
+<head>
+    <?php
+    include("head.php");
+
+    if(!isset($_SESSION['userid'])) {
+        header('Location: login.php');
+        // die('Bitte zuerst <a href="login.php">einloggen</a>!');
+    }
+    ?>
+
+
+</head>
+
+<body id="dashboard" data-spy="scroll" data-target="#navbar">
+<?php
+
+
+
+include("header.php");
+
+?>
+<div class="container">
+    <div class="row">
+
+
+<h1 id="center"> Mein FrogDrops </h1>
+
+<!-- Uploadformular erstellen (Uploadfunktion weiter unten)-->
+<form name="uploadformular" enctype="multipart/form-data" action="dashboard.php" method="post" >
+    Datei: <input type="file" name="uploaddatei" size="60" maxlength="255" >
+    <input type="Submit" name="submit" value="Datei hochladen">
+</form>
 
 
 <?php
-session_start();
-include_once("userdata.php");
 
-if(!isset($_SESSION['userid'])) {
-    header('Location: login.php');
-    // die('Bitte zuerst <a href="login.php">einloggen</a>!');
-}
 
-//Abfrage der Nutzer ID vom Login
-$userid = $_SESSION['userid'];
+//Daten aus Uploads auslesen
+$sqli= "SELECT * FROM uploads WHERE user_id = $userid";
+$statement = $pdo->prepare($sqli);
+$statement->execute();
+$statement->setFetchMode(PDO::FETCH_ASSOC);
+$row = $statement->fetch();
 
-echo "Hallo User: ".$userid;
+//
+//Versuche für Löschen aus dem Server
+//
+//$loeschedatei = $row["datei_name"];
+//echo $loeschedatei;
+//$hallo = "4";
+//print_r($loeschedatei);
+
+//$loeschedatei = $row["datei_name"];
+//$dir = "/home/sd103/public_html/hochgeladenes/files/";
+//unlink($dir . "$loschedatei");
+
+
+//$ordnerinhalt = scandir($ordner);
+
+//readdir($loeschedatei);
+//print_r($ordnerinhalt);
+//echo($ordnerinhalt[$hallo] )
+//["' . $loeschedatei. '"]
+
 
 ?>
 
+<!-- Tabelle mit Inhalten aus uploads erstellen-->
+
+     <!-- Tabellenkopf erstellen-->
+<table class="table table-hover table-responsive table-striped">
+
+    <thead>
+    <th>Dateiname</th>
+    <th>Gr&ouml;ße</th>
+    </thead>
+    <tbody>
+
+    <?php
+
+    $groesse = $row["groesse"];
+
+    function umwandlung($mb){
+        $mbNeu = ($mb / 1048576);
+        $mbNeu = round($mbNeu, 3) . " MB";
+        return $mbNeu;
+    }
+
+    //Tabellenkörper mit ausgelesenen Daten von "uploads" füllen (Nur Daten vom angemeldeten User)
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)){
+        extract($row);
+        echo "<tr>";
+        echo "<td><a href='dateiAnzeigen.php?id=".$row["id"]."'> ".$row["original_name"]."  </a> </td>";
+        echo "<td>" . umwandlung($groesse).  " </td>";
+        //echo "<td> ".$row["groesse"]." ".Byte."</td>";
+        //echo "<td> " . '<a onclick="aendereFile(' . $row["id"] . ',' . $row["original_name"]. ')">umbenennen</a>' . " </td>";
+        echo "<td><a href='umbenennen.php?id=".$row["id"]."'>umbenennen</a></td>";
+        echo "<td> " . '<a onclick="loescheFile(' . $row["id"] . ')">l&ouml;schen</a>' . " </td>";
+        //echo "<td><a href='loeschen.php?id=".$row["id"]."'>l&ouml;schen</a></td>";
+        //echo "<td> " . '<a href="" onclick="removeday()" class="deletebtn">teilen</a>' . " </td>";
+        echo "<td><a href='linkverschicken.php?id=".$row["id"]."'>teilen</a></td>";
+        echo "<td><a href='notiz.php?id=".$row["id"]."'>Notiz</a></td>";
+        echo "</tr>";
+    }
+
+
+    //$var =  "<script> downloadFile('./hochgeladenes/files/Konzeptdokument_Musikvideo_Gruppe_2b_PDF.pdf')  </script>" ;
+
+    //$file = md5($var);
+
+    ?>
+    </tbody>
+</table>
+<!--
+<script>
+
+    function aendereFile(fileId, fileName){
+        bootbox.prompt({
+           title: "Bitte neuen Dateinamen eingeben",
+            //value: fileName,
+            inputType: "text",
+            buttons: {
+                confirm: {
+                    label: '&Auml;ndern',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Abbrechen',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    request = $.ajax({
+                        url: "umbenennen2.php",
+                        type: "post",
+                        data: "id=" + fileId,
+                        success: function() {
+                            window.location = "dashboard.php";
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+</script>
+-->
+
+<!-- Pop Up Box mit Sicherheitsabfrage, wenn löschen-Button angeklickt wird  -->
+<script>
+
+    function loescheFile(fileId){
+        bootbox.confirm({
+            message: "Datei wirklich l&ouml;schen?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    request = $.ajax({
+                        url: "loeschen.php",
+                        type: "post",
+                        data: "id=" + fileId,
+                        success: function() {
+                            window.location = "dashboard.php";
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+</script>
+
 
 <?php
 
-
+//Datei hochladen
 
 
 if ( $_FILES['uploaddatei']['name']  <> "" )
 {
-    // Datei wurde durch HTML-Formular hochgeladen
-    // und kann nun weiterverarbeitet werden
+
 
     // Dateitypen definieren und Kontrolle, ob Dateityp zulässig ist
     $zugelassenedateitypen = array("image/png", "image/jpeg", "image/gif" , "application/pdf" , "application/msword",
@@ -37,7 +201,7 @@ if ( $_FILES['uploaddatei']['name']  <> "" )
     }
     else
     {
-        // Test ob Dateiname in Ordnung
+        // Dateiname bereinigen (Funktion wird weiter unten definiert)
         $_FILES['uploaddatei']['name'] = dateiname_bereinigen($_FILES['uploaddatei']['name']);
 
 
@@ -52,8 +216,7 @@ if ( $_FILES['uploaddatei']['name']  <> "" )
             move_uploaded_file (
                 $_FILES['uploaddatei']['tmp_name'] ,
                 'hochgeladenes/files/'. $new_filename );
-                // $_FILES['uploaddatei']['tmp_name'] ,
-                // 'hochgeladenes/files/'. $_FILES['uploaddatei']['name'] );
+
 
             //Neue Datei in Datenbank hochladen
             $sql= "INSERT INTO uploads (user_id, original_name, datei_name, groesse, datei_typ)
@@ -61,16 +224,12 @@ if ( $_FILES['uploaddatei']['name']  <> "" )
             $statement = $pdo->prepare($sql);
             $result = $statement->execute();
 
-        // Ausgeben des $_FILES Inhalt, bzw. hochgeladenen Inhalts
-            echo "<p>Hochladen war erfolgreich: ";
-            echo '<a href="hochgeladenes/files/'. $_FILES['uploaddatei']['name'] .'">';
-            echo 'hochgeladenes/files/'. $_FILES['uploaddatei']['name']." / ". $_FILES['uploaddatei']['type'].
-                " / ". $_FILES['uploaddatei']['size']; // (Evtl. mit STRIPTEMPNAME FÜR HASHCODE IM LINK!!)
-            echo '</a>';
+
+            $_SESSION['msg'] = "Hochladen war erfolgreich";
         }
         else
         {
-            echo "<p>Dateiname ist nicht zulässig</p>";
+            $_SESSION['msg'] = "Dateiname ist nicht zulässig";
         }
     }
 }
@@ -115,45 +274,61 @@ function dateiname_bereinigen($dateiname)
     return ($dateiname);
 }
 
+
+
+//include("download.php");
+
+//md5(' . echo "<script> downloadFile('./hochgeladenes/profile/img_5743.jpg') </script>" . ');
+//echo "<script> downloadFile('./hochgeladenes/profile/backflip-spielplatz.jpg') </script>"
+
+
+
+?>
+</div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<?php
+include("footer.php");
 ?>
 
-<html>
-
-<form name="uploadformular" enctype="multipart/form-data" action="dashboard.php" method="post" >
-    Datei: <input type="file" name="uploaddatei" size="60" maxlength="255" >
-    <input type="Submit" name="submit" value="Datei hochladen">
-</form>
-
-
-<!-- Ab hier die Dateienliste-->
-<h1>Dateienliste</h1>
-<ul>
-    <?php
-
-    $ordner = "/home/sd103/public_html/hochgeladenes/files/"; //Pfad, wo die Datein sind, hier müsste also
-    // Verbindung mit der Datenbank hergestellt werden
-
-
-    $alledateien = scandir($ordner); // Sortierung A-Z / Dateien in Ordner werden in Variable gespeichert
-
-    foreach ($alledateien as $datei) {
-
-        $dateiinfo = pathinfo($ordner."/".$datei);  //zeigt Typ der Datei an
-        $size = ceil(filesize($ordner."/".$datei)/1024);//1024 steht für kb
-        $date = date("d.m.Y - H:i",filemtime ($ordner."/".$datei));
-
-
-        if ($datei != "." && $datei != ".."  && $datei != "_notes") {
-            ?>
-            <li><a href="<?php echo $dateiinfo['dirname']."/".$dateiinfo['basename'];?>"><?php echo $dateiinfo['filename']; ?></a> (<?php echo $dateiinfo['extension']; ?> |<?php echo $date; ?> | <?php echo $size ; ?>kb)</li>
-            <?php
-        };
-    };
-    ?>
-</ul>
-<!-- Dateienliste geht bis hier - von Anabel! -->
-
-
-
-<p> <a href="logout.php">Abmelden!</a> <p>
+</body>
 </html>

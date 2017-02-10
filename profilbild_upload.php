@@ -1,18 +1,24 @@
+<html lang="de">
+<head>
+
 <?php
-session_start();
-include_once("userdata.php");
+include("head.php");
 
 if(!isset($_SESSION['userid'])) {
     header('Location: login.php');
-    // die('Bitte zuerst <a href="login.php">einloggen</a>!');
 }
-
-//Abfrage der Nutzer ID vom Login
-$userid = $_SESSION['userid'];
-
-echo "Hallo User: ".$userid;
+?>
 
 
+</head>
+<body id="dashboard" data-spy="scroll" data-target="#navbar">
+
+<?php
+include("header.php");
+?>
+
+<h1> Profil von <?php echo $username ?> </h1>
+<?php
 
 if ( $_FILES['bild']['name']  <> "" )
 {
@@ -31,13 +37,27 @@ if ( $_FILES['bild']['name']  <> "" )
         // Test ob Dateiname in Ordnung
         $_FILES['bild']['name'] = dateiname_bereinigen($_FILES['bild']['name']);
 
+        //Löschen der bisherigen Inhalte auf dem Server
+        //Name des Profilbilds heraussuchen und Pfad der Datei auf dem Server in Variable festlegen
+        $sql= "SELECT profilbild FROM users WHERE user_id = $userid";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $loeschname = $stmt->fetch();
+
+        $loeschedatei = $loeschname["profilbild"];
+        $dir = "/home/sd103/public_html/hochgeladenes/profile/";
+
+
         // Wenn Dateiname zulässig ist, wird sie auf den Server und in die DB hochgeladen
-        if ( $_FILES['bild']['name'] <> '' )
+        if ( $_FILES['bild']['name'] <> '')
         {
             move_uploaded_file (
                 $_FILES['bild']['tmp_name'] ,
                 'hochgeladenes/profile/'. $_FILES['bild']['name'] );
 
+            //Aktuelle Datei vom Server löschen, bevor Neue in die Datenbank geladen wird
+            unlink($dir . "$loeschedatei");
 
             //Neue Datei in Datenbank aktualisieren/updaten
             $sql= "UPDATE users 
@@ -48,15 +68,11 @@ if ( $_FILES['bild']['name']  <> "" )
             //print_r($statement->errorInfo());
 
             // Ausgeben des $_FILES Inhalt, bzw. hochgeladenen Inhalts
-            echo "<p>Hochladen war erfolgreich: ";
-            echo '<a href="hochgeladenes/profile/'. $_FILES['bild']['name'] .'">';
-            echo 'hochgeladenes/profile/'. $_FILES['bild']['name']." / ". $_FILES['bild']['type'].
-                " / ". $_FILES['bild']['size']; // (Evtl. mit STRIPTEMPNAME FÜR HASHCODE IM LINK!!)
-            echo '</a>';
+            $_SESSION['msg'] = "Profilbild hochladen war erfolgreich";
         }
         else
         {
-            echo "<p>Dateiname ist nicht zulässig</p>";
+            $_SESSION['msg'] = "Fehler: Dateiname nicht zulässig";
         }
     }
 }
@@ -101,17 +117,41 @@ function dateiname_bereinigen($dateiname)
 }
 
 
+    $sqli= "SELECT profilbild FROM users WHERE user_id = $userid";
+    $statement = $pdo->prepare($sqli);
+    $statement->execute();
+    $statement->setFetchMode(PDO::FETCH_ASSOC);
+    $row = $statement->fetch();
+
+
+        echo "<div>";
+        echo "<img id='profilbildG' src='hochgeladenes/profile/".$row["profilbild"]."'>";
+        echo "</div>";
+
+     //print_r($row);
+     //echo "dies ist die Zahl ".$row;
+    // Bild war varchar (200)
 ?>
 
-<html>
-<head></head>
 
-<body>
 
+
+<!-- Formular für den Upload des Profilbildes -->
 <form id="bildupload" name="bildupload" enctype="multipart/form-data" action="profilbild_upload.php" method="post" >
     Bild: <input type="file" name="bild" size="60" maxlength="255" >
-    <input type="Submit" name="submit" value="Datei hochladen">
+    <input type="Submit" name="submit" value="Bild hochladen">
 </form>
+
+
+<?php
+include("passwortaendern.php");
+?>
+
+
+
+<?php
+include("footer.php");
+?>
 
 </body>
 </html>

@@ -1,27 +1,24 @@
+<html lang="de">
+<head>
 <?php
-session_start();
+include("head.php");
 
-include_once("userdata.php");
+       if(!isset($_SESSION['userid'])) {
+           header('Location: login.php');
+           // die('Bitte zuerst <a href="login.php">einloggen</a>!');
+       }
+?>
 
-/*if(isset($_GET['pwaendern'])) {
-    $passwort = $_POST['passwort'];
-    $passwort2 = $_POST['passwort2'];
-    $passwortNeu = $_POST['passwort3'];
 
-    $statement = $pdo->prepare('SELECT user_id FROM users WHERE passwort = :passwort');
-    $result = $statement->execute(array('passwort' => $passwort));
-    $user = $statement->fetch();
+</head>
+<body id="dashboard" data-spy="scroll" data-target="#navbar">
 
-    //Überprüfung des Passworts
-    if ($user !== false && password_verify($passwort, $user['passwort'])) {
-        $statement2 = $pdo->prepare("UPDATE users SET passwort = :'".$passwortNeu."' WHERE user_id = '".$_SESSION['userid']."' ");
-        $statement2->execute(array('user_id' => $_SESSION['userid'], 'passwort' => '$passwortNeu'));
+<?php
 
-    } else {
-        $errorMessage = "E-Mail oder Passwort war ungültig<br>";
-    }
-*/
- include_once ("dashboard.php");
+include("header.php");
+
+//Nutzer ID wird in Variable gespeichert
+$userid = $_SESSION['userid'];
 
     if(isset($_GET['pwaendern'])) {
     $error = false;
@@ -41,11 +38,14 @@ include_once("userdata.php");
     }
 
 
+
     //Keine Fehler, wir können das Passwort ändern
     if(!$error) {
 
-    $statement2 = $pdo->prepare("UPDATE users SET passwort = '".$passwortNeu."' WHERE user_id = '".$userid."' ");
-    $statement2->execute(array(':passwort' => $passwortNeu));
+        $password_hash = password_hash($passwortNeu, PASSWORD_DEFAULT);
+
+    $statement2 = $pdo->prepare("UPDATE users SET passwort = '".$password_hash."' WHERE user_id = '".$userid."' ");
+    $statement2->execute(array(':passwort' => $password_hash));
 
 
         } else {
@@ -54,34 +54,28 @@ include_once("userdata.php");
 
 }
 
-
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Passwort ändern</title>
-</head>
-<body>
-
-<?php
 if(isset($errorMessage)) {
     echo $errorMessage;
-    echo "<a href=\"".passwortaendern.php."\">Erneut eingeben</a> <br><br>";
+    echo "<a href= passwortaendern.php > Erneut eingeben </a> <br><br>";
 }
 ?>
 
 <form action="passwortaendern.php?pwaendern=1" method="post">
     Passwort:<br>
     <input type="password" size="40" maxlength="250" name="passwort1"><br><br>
-
     Passwort wiederholen:<br>
     <input type="password" size="40" maxlength="250" name="passwort2"><br><br>
-
     Neues Passwort:<br>
     <input type="password" size="40"  maxlength="250" name="passwort3"><br>
 
     <input type="submit" value="Ändern">
 
 </form>
+
+
+<?php
+include("footer.php");
+?>
+
 </body>
 </html>

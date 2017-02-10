@@ -5,9 +5,9 @@
     </div>
 
     <p id="center" class="lead">
-        <a href="impressum.php">Impressum</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="Kontaktformular.php">Kontakt</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="Kontaktformular.php">Aktuelles</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="impressum.php">Impressum</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="Kontaktformular.php">Kontakt</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="Aktuelles.php">Aktuelles</a>
 
     </p>
 
@@ -20,4 +20,15 @@
     </div>
 </footer>
 
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<!-- Pop Up Bereich - Funktion-->
+<script>
+    <?php
+
+    if(isset($_SESSION['msg'])) {
+        echo "bootbox.alert({message: '" . $_SESSION['msg'] . "', backdrop: true});";
+        unset($_SESSION['msg']);
+    }
+
+    ?>
+</script>
+

@@ -1,20 +1,17 @@
-<?php
-
-
-
-session_start();
-include_once("login_header.php");
-
-?>
-
-<!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <title>Registrierung</title>
+
+    <?php
+    include("head.php");
+    ?>
 </head>
-<body>
+<body id="login" data-spy="scroll" data-target="#navbar">
+
+
 
 <?php
+include("header.php");
+
 $zeigeFormular = true; //Variable ob das Registrierungsformular anezeigt werden soll
 
 if(isset($_GET['register'])) {
@@ -93,6 +90,8 @@ if($zeigeFormular) {
 
     <?php
 } //Ende von if($zeigeFormular)
+
+include("footer.php");
 ?>
 
 </body>

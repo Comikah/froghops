@@ -1,0 +1,153 @@
+.collapse.navbar-collapse{
+    overflow-x: hidden;
+}
+
+.navbar-header #homebutton,
+.navbar-header #FrogDropsSchrift{
+    display: none;
+}
+
+ @media only screen and (max-width: 767px){
+     .navbar-header #homebutton,
+     .navbar-header #FrogDropsSchrift{
+         display: initial;
+     }
+
+     .navbar-header #FrogDropsSchrift{
+         left: 60px;
+         top: 10px;
+     }
+     .navbar-nav #homebutton,
+     .navbar-nav #FrogDropsSchrift{
+         display: none;
+     }
+ }
+
+#hintergrund_login{
+     width: 50px;
+     height: 50px;
+     position: fixed;
+     top:0;
+ }
+
+#homebutton{
+    margin-left: -10px;
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    top:0;
+    left: 0;
+}
+
+#Buttongr{
+    width: 140px;
+    height: 33.5px;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 8px;
+    margin-right: 4px;
+    padding: 0;
+    padding-top: 7px;
+    vertical-align: middle;
+    background-color: #286090;
+
+}
+
+#Platzhalter{
+    height: 60px;
+}
+
+#profilbildG {
+    width: 300px;
+    height: 200px;
+}
+
+
+#Buttonk{
+    position: relative;
+    left: 0;
+    top: 4px;
+    background-color: white;
+}
+
+#profilbildK {
+    position: relative;
+    top: 0;
+    right: 0;
+    height: 40px;
+    border-radius: 10px;
+}
+
+#center{
+    text-align: center;
+}
+
+#FrogDropsSchrift{
+    position: relative;
+    left: 45px;
+    top: 0;
+    text-align: center;
+    font-size: x-large;
+}
+
+/* News - Seite */
+
+#aktuellesBild {
+    width: 300px;
+    height: 200px;
+}
+
+#newsBlock{
+    position: relative;
+    left: 295px;
+    margin-top: 50px;
+}
+
+/* header Bootstrap */
+.jumbotron{
+
+    background-image: url(bilder/logo_frosch_bunt.png);
+    text-align: center;
+}
+
+#zusammenfassung{
+    text-align: center;
+}
+
+.card-img-top{
+    width:100%;
+}
+
+#login #Platzhalter{
+    height: 50px;
+}
+
+/* Footer */
+#footer{
+    background-color:lightgrey;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-top: 50px;
+}
+
+#login #Buttongr{
+    width: 140px;
+    height: 33.5px;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 8px;
+    padding: 0;
+    padding-top: 7px;
+    vertical-align: middle;
+    background-color: #286090;
+}
+
+/* Datei Anzeigen */
+#iFrameDownload{
+    position: relative;
+    left: 100px;
+    width: 1000px;
+    height:700px;
+}
+

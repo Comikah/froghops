@@ -1,7 +1,11 @@
+<html lang="de">
+<head>
+
 <?php
-session_start();
-include("userdata.php");
+include("head.php");
 ?>
+</head>
+<body id="login" data-spy="scroll" data-target="#navbar">
 
 <?php
 if(isset($_GET['login'])) {
@@ -37,7 +41,7 @@ if(isset($_GET['login'])) {
             }
 
 
-include("login_header.php");
+include("header.php");
 ?>
 
 <div class="jumbotron" id="jumbotron">
@@ -70,53 +74,9 @@ include("login_header.php");
 
 </div>
 
-        <div class="container">
-        <div class="row">
-        <div class="col-sm-6 col-md-8">
-        <div class="thumbnail">
-            <img class="card-img-top" src="vorschau.png" alt="...">
-            <div class="caption">
-                <h3>Mehr Infos zur App</h3>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et</p>
 
 
-            </div>
-        </div>
-        </div>
-        </div>
-            </div>
 
-        <div class="container">
-        <div class="row">
-        <div class="col-sm-6 col-md-8">
-            <div class="thumbnail">
-                <img class="card-img-top" src="vorschau.png" alt="...">
-                <div class="caption">
-                    <h3>Mehr Infos zur App</h3>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et</p>
-
-
-                </div>
-            </div>
-        </div>
-        </div>
-        </div>
-
-        <div class="container">
-        <div class="row">
-            <div class="col-sm-6 col-md-8">
-                <div class="thumbnail">
-                    <img class="card-img-top" src="vorschau.png" alt="...">
-                    <div class="caption">
-                        <h3>Mehr Infos zur App</h3>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et</p>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
 
 
             <?php

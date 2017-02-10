@@ -1,11 +1,19 @@
+<html lang="de">
+<head>
 <?php
-include("head.php")
+include("head.php");
+
+    /* if(!isset($_SESSION['userid'])) {
+		header('Location: login.php');
+		// die('Bitte zuerst <a href="login.php">einloggen</a>!');
+	} */
+
 ?>
-
-<body>
+</head>
+<body id="dashboard" data-spy="scroll" data-target="#navbar">
 <?php
 
-include("dashboard_header.php");
+include("header.php");
 
 
 $showForm = true;

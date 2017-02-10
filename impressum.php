@@ -1,30 +1,17 @@
-<?php
+<html lang="de">
+<head>
+
+    <?php
 include("head.php")
 ?>
 
-    <style type="text/css">
 
-        body {
-            position: relative;
-        }
-
-        .nav  {
-            padding-left: 170px;
-
-        }
-        #hintergrund_login{
-            width: 50px;
-            height: 50px;
-            position: fixed;
-            top:0;
-        }
-
-    </style>
-<body>
+</head>
+<body id="dashboard" data-spy="scroll" data-target="#navbar">
 
 <?php
 
-include("dashboard_header.php");
+include("header.php");
 
 ?>
 

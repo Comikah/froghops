@@ -1,6 +1,15 @@
+<html lang="de">
+<head>
+
+    <?php
+    include("head.php");
+    ?>
+</head>
+<body id="login" data-spy="scroll" data-target="#navbar">
+
 <?php
 
-include("login_header.php");
+include("header.php");
 
 function random_string() {
     if(function_exists('random_bytes')) {
