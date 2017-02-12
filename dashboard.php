@@ -1,5 +1,7 @@
 <html lang="de">
 <head>
+    <link rel="stylesheet" href="Sonstiges/Dropzone/dropzone.css">
+
     <?php
     include("head.php");
 
@@ -10,12 +12,27 @@
     ?>
 
 
+    <script>
+        Dropzone.options.dzeinstellung = {
+            paramName: "uploaddatei",
+            maxFilesize: 2,
+            dictDefaultMessage: " ",
+            thumbnailHeight: 60, thumbnailWidth: 60,
+            init: function(){
+                this.on('complete', function(file) {
+                    this.removeFile(file);
+                    location.reload();
+                })
+            }
+        };
+    </script>
+
+
+
 </head>
 
 <body id="dashboard" data-spy="scroll" data-target="#navbar">
 <?php
-
-
 
 include("header.php");
 
@@ -27,42 +44,25 @@ include("header.php");
 <h1 id="center"> Mein FrogDrops </h1>
 
 <!-- Uploadformular erstellen (Uploadfunktion weiter unten)-->
-<form name="uploadformular" enctype="multipart/form-data" action="dashboard.php" method="post" >
+<!-- <form name="uploadformular" enctype="multipart/form-data" action="dashboard.php" method="post" >
     Datei: <input type="file" name="uploaddatei" size="60" maxlength="255" >
     <input type="Submit" name="submit" value="Datei hochladen">
-</form>
+</form> -->
 
+        <!-- Drag and Drop Formular -->
+        <div class="col-md-12">
+        <div id="dzText" > Laiche deine Daten hier drin ab! </div>
+        <form id="dzeinstellung" name="uploadformular" action="dashboard.php" class="dropzone"> </form>
+        </div>
 
 <?php
-
 
 //Daten aus Uploads auslesen
 $sqli= "SELECT * FROM uploads WHERE user_id = $userid";
 $statement = $pdo->prepare($sqli);
 $statement->execute();
 $statement->setFetchMode(PDO::FETCH_ASSOC);
-$row = $statement->fetch();
-
-//
-//Versuche für Löschen aus dem Server
-//
-//$loeschedatei = $row["datei_name"];
-//echo $loeschedatei;
-//$hallo = "4";
-//print_r($loeschedatei);
-
-//$loeschedatei = $row["datei_name"];
-//$dir = "/home/sd103/public_html/hochgeladenes/files/";
-//unlink($dir . "$loschedatei");
-
-
-//$ordnerinhalt = scandir($ordner);
-
-//readdir($loeschedatei);
-//print_r($ordnerinhalt);
-//echo($ordnerinhalt[$hallo] )
-//["' . $loeschedatei. '"]
-
+//$row = $statement->fetch();
 
 ?>
 
@@ -79,6 +79,7 @@ $row = $statement->fetch();
 
     <?php
 
+    //Funktion: Byte in MB umwandeln
     $groesse = $row["groesse"];
 
     function umwandlung($mb){
@@ -92,33 +93,62 @@ $row = $statement->fetch();
         extract($row);
         echo "<tr>";
         echo "<td><a href='dateiAnzeigen.php?id=".$row["id"]."'> ".$row["original_name"]."  </a> </td>";
+
         echo "<td>" . umwandlung($groesse).  " </td>";
-        //echo "<td> ".$row["groesse"]." ".Byte."</td>";
-        //echo "<td> " . '<a onclick="aendereFile(' . $row["id"] . ',' . $row["original_name"]. ')">umbenennen</a>' . " </td>";
-        echo "<td><a href='umbenennen.php?id=".$row["id"]."'>umbenennen</a></td>";
+
+        echo "<td> " . '<a onclick="aendereFile(' . $row["id"] . ',\'' . $row["original_name"]. '\')">umbenennen</a>' . " </td>";
+
         echo "<td> " . '<a onclick="loescheFile(' . $row["id"] . ')">l&ouml;schen</a>' . " </td>";
-        //echo "<td><a href='loeschen.php?id=".$row["id"]."'>l&ouml;schen</a></td>";
-        //echo "<td> " . '<a href="" onclick="removeday()" class="deletebtn">teilen</a>' . " </td>";
-        echo "<td><a href='linkverschicken.php?id=".$row["id"]."'>teilen</a></td>";
+
+        if ($row['freigegeben'] != NULL) {
+            echo "<td><a href='dateiFreigabeBeenden.php?id=" . $row["id"] . "'>Freigabe beenden</a></td>";
+            echo "<td><a onclick='zeigeLink(\"".$row['freigegeben']."\")'>Link anzeigen</a></td>";
+            echo "<td><a onclick='versendeLink(\"".$row['freigegeben']."\")'>Link versenden</a></td>";
+        }else {
+            echo "<td><a href='dateiFreigabe.php?id=" . $row["id"] . "'> <i class=\"fa fa-unlock\" aria-hidden=\"true\"> </i> </a></td>";
+            echo "<td> </td>";
+            echo "<td> </td>";
+        }
+
         echo "<td><a href='notiz.php?id=".$row["id"]."'>Notiz</a></td>";
         echo "</tr>";
+
+        //Variable erstellen mit Gesamtgröße aller Dateien und maximale MB festlegen
+        $mbGesamt += umwandlung($groesse);
+        $mbMax = 50;
+
     }
 
-
-    //$var =  "<script> downloadFile('./hochgeladenes/files/Konzeptdokument_Musikvideo_Gruppe_2b_PDF.pdf')  </script>" ;
-
-    //$file = md5($var);
-
+    if ($mbGesamt > 0) {
+        $prozentAnzahl = ($mbGesamt / $mbMax) * 100;
+        $prozentAnzahlgerundet = round($prozentAnzahl, 0);
+}
     ?>
     </tbody>
 </table>
-<!--
+
+
+
+<!-- Progess Bar, als Anzeige für die aktuellen MB-Stand -->
+        <?php  if ($mbGesamt > 0){?>
+        <div> <?php echo $mbGesamt . "MB von " . $mbMax . "MB belegt" ?> </div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $mbGesamt?>"
+                 aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $prozentAnzahl?>%;">
+                 <?php echo $prozentAnzahlgerundet . "%" ?>
+            </div>
+        </div>
+        <?php } ?>
+
+
 <script>
+
+    // Pop Up Box mit Kommentarfeld, wenn Umbenennen-Button angeklickt wird
 
     function aendereFile(fileId, fileName){
         bootbox.prompt({
            title: "Bitte neuen Dateinamen eingeben",
-            //value: fileName,
+            value: fileName,
             inputType: "text",
             buttons: {
                 confirm: {
@@ -135,7 +165,7 @@ $row = $statement->fetch();
                     request = $.ajax({
                         url: "umbenennen2.php",
                         type: "post",
-                        data: "id=" + fileId,
+                        data: "id=" + fileId + "&name=" + result,
                         success: function() {
                             window.location = "dashboard.php";
                         }
@@ -145,22 +175,54 @@ $row = $statement->fetch();
         });
     }
 
-</script>
--->
 
-<!-- Pop Up Box mit Sicherheitsabfrage, wenn löschen-Button angeklickt wird  -->
-<script>
+    // Pop Up Box mit Emailfeld, wenn Link versenden angeklickt wird
+
+    function versendeLink(HASH){
+        bootbox.prompt({
+            title: "Bitte Emailadresse eintragen",
+            inputType: "text",
+            buttons: {
+                confirm: {
+                    label: 'Versenden',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Abbrechen',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    request = $.ajax({
+                        url: "linkverschicken.php",
+                        type: "post",
+                        data: "id=" + HASH + "&email=" + result,
+                        success: function() {
+                            window.location = "dashboard.php";
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+
+
+// Pop Up Box mit Sicherheitsabfrage, wenn löschen-Button angeklickt wird
+
 
     function loescheFile(fileId){
         bootbox.confirm({
             message: "Datei wirklich l&ouml;schen?",
             buttons: {
                 confirm: {
-                    label: 'Yes',
+                    label: 'Ja',
                     className: 'btn-success'
                 },
                 cancel: {
-                    label: 'No',
+                    label: 'Nein',
                     className: 'btn-danger'
                 }
             },
@@ -177,6 +239,15 @@ $row = $statement->fetch();
                 }
             }
         });
+    }
+
+
+    // POP UP Box mit Link Anzeige
+
+    function zeigeLink (HASH){
+        bootbox.alert('<a target="new" href="'+ "https://mars.iuk.hdm-stuttgart.de/~sd103/datei_runterladen.php?id=" + HASH + '">'
+            + "https://mars.iuk.hdm-stuttgart.de/~sd103/datei_runterladen.php?id=" + HASH + '</a>');
+
     }
 
 </script>
@@ -230,6 +301,7 @@ if ( $_FILES['uploaddatei']['name']  <> "" )
         else
         {
             $_SESSION['msg'] = "Dateiname ist nicht zulässig";
+            $_SESSION['msg_error'] = true;
         }
     }
 }
@@ -274,16 +346,8 @@ function dateiname_bereinigen($dateiname)
     return ($dateiname);
 }
 
-
-
-//include("download.php");
-
-//md5(' . echo "<script> downloadFile('./hochgeladenes/profile/img_5743.jpg') </script>" . ');
-//echo "<script> downloadFile('./hochgeladenes/profile/backflip-spielplatz.jpg') </script>"
-
-
-
 ?>
+
 </div>
 </div>
 
@@ -298,33 +362,8 @@ function dateiname_bereinigen($dateiname)
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
+
 
 <?php
 include("footer.php");
