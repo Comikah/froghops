@@ -20,27 +20,25 @@ include("header.php");
 //Nutzer ID wird in Variable gespeichert
 $userid = $_SESSION['userid'];
 
+
+    //Prüfung, ob FOrmular ausgefüllt wurde
     if(isset($_GET['pwaendern'])) {
-    $error = false;
+    $errorMessage = false;
     $passwort = $_POST['passwort'];
     $passwort2 = $_POST['passwort2'];
     $passwortNeu = $_POST['passwort3'];
 
-/*
-    if(strlen($passwort) == 0) {
-        echo 'Bitte ein Passwort angeben<br>';
-        $error = true;
-    }
-*/
+
+        //Prüft ob Passwörter richtig eingegeben wurden
         if(($passwort != $passwort2) && ($passwort == $passwortNeu) ) {
         echo 'Die Passwörter stimmen nicht überein oder das neugewählte Passwort ist unverändert! <br>';
-        $error = true;
+        $errorMessage = true;
     }
 
 
 
     //Keine Fehler, wir können das Passwort ändern
-    if(!$error) {
+    if(!$errorMessage) {
 
         $password_hash = password_hash($passwortNeu, PASSWORD_DEFAULT);
 
@@ -49,17 +47,22 @@ $userid = $_SESSION['userid'];
 
 
         } else {
-            echo 'Beim Ändern ist leider ein Fehler aufgetreten <br>'.$pdo->errorInfo();
+            $error = 'Beim Ändern ist leider ein Fehler aufgetreten <br>'.$pdo->errorInfo();
+        $_SESSION['msg'] = $error;
+        $_SESSION['msg_error'] = true;
         }
 
 }
 
 if(isset($errorMessage)) {
-    echo $errorMessage;
-    echo "<a href= passwortaendern.php > Erneut eingeben </a> <br><br>";
+    //echo $errorMessage;
+    $_SESSION['msg'] = $errorMessage;
+    $_SESSION['msg_error'] = true;
+    //echo "<a href= passwortaendern.php > Erneut eingeben </a> <br><br>";
 }
 ?>
 
+<!-- Formular für Passwort ändern -->
 <form action="passwortaendern.php?pwaendern=1" method="post">
     Passwort:<br>
     <input type="password" size="40" maxlength="250" name="passwort1"><br><br>
@@ -73,9 +76,7 @@ if(isset($errorMessage)) {
 </form>
 
 
-<?php
-include("footer.php");
-?>
+
 
 </body>
 </html>

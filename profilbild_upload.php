@@ -20,17 +20,19 @@ include("header.php");
 <h1> Profil von <?php echo $username ?> </h1>
 <?php
 
+//Prüfung, ob übergebene Datei leer ist
 if ( $_FILES['bild']['name']  <> "" )
 {
-    // Datei wurde durch HTML-Formular hochgeladen
-    // und kann nun weiterverarbeitet werden
+
 
     // Dateitypen definieren und Kontrolle, ob Dateityp zulässig ist
     $zugelassenedateitypen = array("image/png", "image/jpeg", "image/gif");
 
     if ( ! in_array( $_FILES['bild']['type'] , $zugelassenedateitypen ))
     {
-        echo "<p>Dateitype ist NICHT zugelassen</p>";
+        //echo "<p>Dateitype ist NICHT zugelassen</p>";
+        $_SESSION['msg'] = "Dateityp ist NICHT zugelassen";
+        $_SESSION['msg_error'] = true;
     }
     else
     {
@@ -73,6 +75,7 @@ if ( $_FILES['bild']['name']  <> "" )
         else
         {
             $_SESSION['msg'] = "Fehler: Dateiname nicht zulässig";
+            $_SESSION['msg_error'] = true;
         }
     }
 }
@@ -111,26 +114,25 @@ function dateiname_bereinigen($dateiname)
     $dateiname = str_replace (",", "-", $dateiname );
     $dateiname = str_replace ("--", "-", $dateiname );
 
-    // "Heilfunktion"
+    // Dateiname wird nochmal gefiltert
     $dateiname = filter_var($dateiname, FILTER_SANITIZE_URL);
     return ($dateiname);
 }
 
-
+    // Profilbild mit SELECT heraussuchen und anzeigen lassen
     $sqli= "SELECT profilbild FROM users WHERE user_id = $userid";
     $statement = $pdo->prepare($sqli);
     $statement->execute();
     $statement->setFetchMode(PDO::FETCH_ASSOC);
     $row = $statement->fetch();
 
+        If ($row["profilbild"] != NULL) {
+            echo "<div>";
+            echo "<img id='profilbildG' src='hochgeladenes/profile/" . $row["profilbild"] . "'>";
+            echo "</div>";
+        }
 
-        echo "<div>";
-        echo "<img id='profilbildG' src='hochgeladenes/profile/".$row["profilbild"]."'>";
-        echo "</div>";
 
-     //print_r($row);
-     //echo "dies ist die Zahl ".$row;
-    // Bild war varchar (200)
 ?>
 
 
@@ -138,15 +140,10 @@ function dateiname_bereinigen($dateiname)
 
 <!-- Formular für den Upload des Profilbildes -->
 <form id="bildupload" name="bildupload" enctype="multipart/form-data" action="profilbild_upload.php" method="post" >
-    Bild: <input type="file" name="bild" size="60" maxlength="255" >
+
+    <input id="bilder" type="file" name="bild" size="60" maxlength="255" >
     <input type="Submit" name="submit" value="Bild hochladen">
 </form>
-
-
-<?php
-include("passwortaendern.php");
-?>
-
 
 
 <?php

@@ -90,52 +90,6 @@ include("header.php");
 
 <?php
 
-$ordner = "/home/sd103/public_html/hochgeladenes/profile/";
-$alledateien = scandir($ordner);
-
-//$dir = '/hochgeladenes/profile/';
-$dir = 'https://mars.iuk.hdm-stuttgart.de/~sd103/public_html/hochgeladenes/profile';
-//echo $alledateien["3"];
-
-$einedatei = $alledateien["3"];
-
-//echo $alledateien['1'];
-//print_r($alledateien);
-//var_dump($alledateien['2']);
-
-
-//$einedatei = "/umbenennen.php?id=".$id.$einedatei;
-$download_name = basename($einedatei);
-echo $einedatei;
-
-/*
-if (isset($einedatei)) {
-    header('Content-Type: application/png');
-    header('Content-Disposition: attachment; filename=' . $download_name);
-    header('X-Sendfile: ' . $einedatei);
-    exit;
-}*/
-/*
-if (isset($einedatei)) {
-    header('Content-Description: File Transfer');
-    header('Content-Type: image/jpeg');
-    header('Content-Disposition: attachment; filename="'.basename($einedatei).'"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($einedatei));
-    readfile($dir.$einedatei);
-    exit;
-}
-*/
-/*
-header("Content-Type: image/jpeg");
-header("Content-Disposition: attachment; filename=\"$einedatei\"");
-
-readfile($dir.$einedatei);
-*/
-
-
 include("footer.php");
 ?>
 </body>

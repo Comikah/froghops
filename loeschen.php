@@ -12,15 +12,8 @@
 
 <body>
 <?php
-//SESSION Variablen "Username" und "Userid" holen
-/*if(isset($_SESSION['username'])){
-    $username = $_SESSION['username'];
-}
 
-if(isset($_SESSION['username'])){
-    $userid = $_SESSION['userid'];
-}
-*/
+
 $id=isset($_POST['id']) ? $_POST['id'] : die('ERROR: ID not found.');
 $sqli= "SELECT * FROM uploads WHERE id = $id";
 $statement = $pdo->prepare($sqli);

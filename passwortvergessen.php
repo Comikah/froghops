@@ -11,6 +11,8 @@
 
 include("header.php");
 
+
+// Funktion, um einen String zu hashen
 function random_string() {
     if(function_exists('random_bytes')) {
         $bytes = random_bytes(16);
@@ -27,17 +29,20 @@ function random_string() {
     return $str;
 }
 
-
+// showForm Variable wird erstellt, um die Form später ausblenden zu können
 $showForm = true;
 
+// Prüfung, ob Werte in das Formular eingetragen wurden (GET)
 if(isset($_GET['send']) ) {
     if(!isset($_POST['email']) || empty($_POST['email'])) {
         $error = "<b>Bitte eine E-Mail-Adresse eintragen</b>";
+
     } else {
         $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $result = $statement->execute(array('email' => $_POST['email']));
         $user = $statement->fetch();
 
+        //Prüfung, ob ein Benutzer gefunden wurde
         if($user == false) {
             $error = "<b>Kein Benutzer gefunden</b>";
         } else {
@@ -47,9 +52,9 @@ if(isset($_GET['send']) ) {
 
             $result = $statement->execute(array(':passwortcode' => $passwortcode, ':userid' => $user['user_id']));
             //print_r($statement->errorInfo());
-            echo "DB -Passcode ".$passwortcode." userid ".$user['user_id'];
+            //echo "DB -Passcode ".$passwortcode." userid ".$user['user_id'];
 
-
+            // Werte für Emailfunktion generieren
             $empfaenger = $user['email'];
             $betreff = "Neues Passwort für deinen Account auf Frog Drops";
             $from = "From: Stephen Duscher <ste.duscher@googlemail.com>";
@@ -63,9 +68,11 @@ Sollte dir dein Passwort wieder eingefallen sein oder hast du dies nicht angefor
 Viele Grüße,
 dein Frog Drop Team';
 
+
+            // Email funktion - Email versenden
             mail($empfaenger, $betreff, $text, $from);
 
-            echo "Ein Link um dein Passwort zurückzusetzen wurde an deine E-Mail-Adresse gesendet.";
+            $_SESSION['msg'] = "Ein Link um dein Passwort zurückzusetzen wurde an deine E-Mail-Adresse gesendet.";
             $showForm = false;
         }
     }
@@ -73,21 +80,48 @@ dein Frog Drop Team';
 
 if($showForm):
     ?>
-
+<!--
     <h1>Passwort vergessen</h1>
     Gib hier deine E-Mail-Adresse ein, um ein neues Passwort anzufordern.<br><br>
 
 
     <form action="passwortvergessen.php?send=1" method="post">
         E-Mail:<br>
-        <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlentities($_POST['email']) : ''; ?>"><br>
+        <input type="email" name="email" value="<?php //echo isset($_POST['email']) ? htmlentities($_POST['email']) : ''; ?>"><br>
         <input type="submit" value="Neues Passwort">
     </form>
+-->
+
+    <!-- Formular für Emailversendung -->
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3"> </div>
+
+            <div class="col-md-6" id="rahmen">
+
+                <h1 class="ueberschrift" id="center"> Passwort vergessen </h1>
+                <br>
+                <p id="center"> Trage deine E-Mail Adresse ein, um ein neues Passwort anzufordern.</p>
+
+                <div id="rahmenInnen">
+                <form action="passwortvergessen.php?send=1" method="post">
+
+                    <input class="form-control" type="email" id="nachrichtKontaktformular" name="email" value="<?php echo isset($_POST['email']) ? htmlentities($_POST['email']) : ''; ?>"> <br>
+
+                    <input class="btn btn-primary" id="submit" type="submit" name="submit" value="Neues Passwort">
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <?php
     if(isset($error) && !empty($error)) {
-        echo $error;
+        $_SESSION['msg'] = $error;
+        $_SESSION['msg_error'] = true;
     }
 
 endif; //Endif von if($showForm)

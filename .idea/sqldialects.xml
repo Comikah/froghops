@@ -3,9 +3,12 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Kontaktformular.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/dashboard.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/dateiFreigabe.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/dateiFreigabeBeenden.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/dateiupload.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/delete.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/download.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/download2.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/header.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/linkverschicken.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/loeschen.php" dialect="MySQL" />
@@ -17,8 +20,7 @@
     <file url="file://$PROJECT_DIR$/profilbild_upload.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/registrieren.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/umbenennen.php" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/uploaddatei.php" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/uploaddateiManager.php" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/umbenennen2.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/userdata.php" dialect="MySQL" />
   </component>
 </project>

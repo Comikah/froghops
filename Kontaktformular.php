@@ -3,14 +3,12 @@
 <?php
 include("head.php");
 
-    /* if(!isset($_SESSION['userid'])) {
-		header('Location: login.php');
-		// die('Bitte zuerst <a href="login.php">einloggen</a>!');
-	} */
-
 ?>
+
 </head>
 <body id="dashboard" data-spy="scroll" data-target="#navbar">
+
+
 <?php
 
 include("header.php");
@@ -18,21 +16,20 @@ include("header.php");
 
 $showForm = true;
 
-// var_dump($_POST); - Für das Überprüfen der POST-Werte
 
+
+//Prüfung, ob Werte in das Formular eingetragen wurde
 if (isset($_GET["Kontaktformular"]) && isset($_POST["mail"]) && isset($_POST["betreff"]) && isset($_POST["nachricht"])) {
 
 	//Versendungsinformationen (aus dem Formular) in Variable speichern
 	$an = "ste.duscher@googlemail.com";
 	$vorname = $_POST["vorname"];
 	$nachname = $_POST["nachname"];
-	$email = $_POST["mail"];
+	$email = 'From: ' . $_POST['mail'] . "\r\n" .
+		'X-Mailer: PHP/' . phpversion();
 	$betreff = $_POST["betreff"];
 	$nachricht = $_POST["nachricht"];
 
-	// Header wird UTF-8 fähig gemacht
-	//$mail_header = 'From:' . $email . "n";
-	//$mail_header = 'Content-type: text/plain; charset=UTF-8' . "rn";
 
 	// Namen zusammenfügen
 	$name = $vorname.' '.$nachname;
@@ -49,9 +46,6 @@ if (isset($_GET["Kontaktformular"]) && isset($_POST["mail"]) && isset($_POST["be
 	mail($an, $betreff, $message, $email);
 
 
-	//echo("Email erfolgreich versendet!");
-	// exit();
-
 	$showForm = false;
 
 };
@@ -63,37 +57,63 @@ if($showForm):
 endif; //Endif von if($showForm)
 
 if ($showForm == false){
-	echo ("Email erfolgreich versendet!"); //Pop UP ZEICHEN!
+	$_SESSION['msg'] = "Email erfolgreich versendet!";
 
 }
 
 ?>
 
 
-<!-- Formular für die Kontaktaufnahme-->
-<form action="Kontaktformular.php?Kontaktformular=1" method="post" name="kontakt">
-	<h1>Kontakt </h1>
-	<label for="vorname"> Vorname: </label>
-	<input type="text" id="vorname" name="vorname">
-	<label for="nachname"> Nachname: </label>
-	<input type="text" id="nachname" name="nachname"> <br> <br>
-	<label for="Mail"> E-Mail-Adresse: </label>
-	<input type="text" id="mail" name="mail"> <br> <br>
-	<label for="Betreff"> Betreff: </label>
-	<input type="text" id="betreff" name="betreff"> <br> <br>
-	<label for="nachricht"> Nachricht: </label><br>
-	<textarea id="nachricht" rows="10" cols="100" name="nachricht">
+
+<div class="container">
+	<div class="row">
+
+ <!-- Formular für die Kontaktaufnahme-->
+
+		<div class="col-md-3">
+
+		</div>
+
+
+		<div class="col-md-6" id="rahmen">
+
+			<h1 class="ueberschrift" id="center"> Kontakt </h1>
+			<br>
+
+			<div id="rahmenInnen">
+		<form action="Kontaktformular.php?Kontaktformular=1" method="post" name="kontakt">
+
+
+	<input class="form-control" type="text" id="nachrichtKontaktformular" name="vorname" placeholder="Vorname"> <br>
+
+	<input class="form-control" type="text" id="nachrichtKontaktformular" name="nachname" placeholder="Nachname"> <br>
+
+	<input class="form-control" type="text" id="nachrichtKontaktformular" name="mail" placeholder="Email"> <br>
+
+	<input class="form-control" type="text" id="nachrichtKontaktformular" name="betreff" placeholder="Betreff"> <br>
+
+	<textarea class="form-control" id="nachrichtKontaktformular" rows="5"  name="nachricht">
     </textarea>
 	<br>
 
-	<input id="submit" type="submit" name="submit" value="Senden">
+	<input class="btn btn-primary" id="submit" type="submit" name="submit" value="Senden">
+
 </form>
-<br><br>
+			</div>
+		</div>
+   </div>
+</div>
+
+<br>
+<br>
+<br>
+
 
 
 <?php
 include("footer.php");
 ?>
+
 
 
 </body>
