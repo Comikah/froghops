@@ -7,11 +7,10 @@
 
     if(!isset($_SESSION['userid'])) {
         header('Location: login.php');
-        // die('Bitte zuerst <a href="login.php">einloggen</a>!');
     }
     ?>
 
-    <!-- Java Script - Einstellung für die Dropbox -->
+    <!-- Java Script - Einstellung für Drag and Drop -->
     <script>
         Dropzone.options.dzeinstellung = {
             paramName: "uploaddatei",
@@ -31,7 +30,7 @@
 
 </head>
 
-<body id="dashboard" data-spy="scroll" data-target="#navbar">
+<body id="dashboard" class="loginkomplett" data-spy="scroll" data-target="#navbar">
 <?php
 
 include("header.php");
@@ -44,16 +43,13 @@ include("header.php");
         <br>
 <h3 id="center"> Laiche deine Daten hier im Teich ab </h3>
 
-<!-- Uploadformular erstellen (Uploadfunktion weiter unten)-->
-<!-- <form name="uploadformular" enctype="multipart/form-data" action="dashboard.php" method="post" >
-    Datei: <input type="file" name="uploaddatei" size="60" maxlength="255" >
-    <input type="Submit" name="submit" value="Datei hochladen">
-</form> -->
+
 
         <!-- Drag and Drop Formular -->
         <div class="col-md-3">  </div>
         <div class="col-md-6 ">
-        <form id="dzeinstellung" name="uploadformular" action="dashboard.php" class="dropzone"> </form>
+
+        <form id="dzeinstellung" name="uploadformular" action="dashboard.php" class="dropzone" > </form>
         </div>
         <div class="col-md-3">  </div>
 
@@ -68,18 +64,27 @@ $sqli= "SELECT * FROM uploads WHERE user_id = $userid";
 $statement = $pdo->prepare($sqli);
 $statement->execute();
 $statement->setFetchMode(PDO::FETCH_ASSOC);
-//$row = $statement->fetch();
+
 
 ?>
 
 <!-- Tabelle mit Inhalten aus uploads erstellen-->
 
      <!-- Tabellenkopf erstellen-->
-<table class="table table-hover table-responsive table-striped">
+        <div class="table-container">
+<table class="table table-hover table-responsive table-striped" >
 
-    <thead>
-    <th>Dateiname</th>
-    <th>Gr&ouml;ße</th>
+    <thead id="center">
+    <th id='center' class="col-sm-3">Dateiname</th>
+    <th id='center' class="col-sm-2">Gr&ouml;ße</th>
+    <th id='center'> &Auml;ndern</th>
+    <th id='center'> L&ouml;schen</th>
+    <th id='center'> Notiz</th>
+    <th id='center'> Freigabe </th>
+    <th id='center'> Anschauen</th>
+    <th id='center'> Versenden</th>
+
+
     </thead>
     <tbody>
 
@@ -99,27 +104,30 @@ $statement->setFetchMode(PDO::FETCH_ASSOC);
         //$row - Daten werden zur verfügung gestellt
         extract($row);
         echo "<tr>";
-        echo "<td> <i id=\"tdicon\" class=\"fa fa-download\" aria-hidden=\"true\"></i> <a href='dateiAnzeigen2.php?id=".$row["id"]."'> ".$row["original_name"]."  </a> </td>";
+        echo "<td > <i id=\"tdicon\" class=\"fa fa-download\" aria-hidden=\"true\"></i> <a target='new' href='dateiAnzeigen2.php?id=".$row["id"]."'> ".$row["original_name"]."  </a> </td>";
 
-        echo "<td>" . umwandlung($groesse).  " </td>";
+        echo "<td id='center'>" . umwandlung($groesse).  " </td>";
 
-        echo "<td> " . '<a onclick="aendereFile(' . $row["id"] . ',\'' . $row["original_name"]. '\')"> <i id="tdicon" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>' . " </td>";
+        echo "<td id='center' class=\"col-sm-1\"> " . '<a onclick="aendereFile(' . $row["id"] . ',\'' . $row["original_name"]. '\')"><i id="tdicon" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>' . " </td>";
 
-        echo "<td> " . '<a onclick="loescheFile(' . $row["id"] . ')"> <i id="tdicon" class="fa fa-trash" aria-hidden="true"></i> </a>' . " </td>";
+        echo "<td id='center' class=\"col-sm-1\"> " . '<a onclick="loescheFile(' . $row["id"] . ')"><i id="tdicon" class="fa fa-trash" aria-hidden="true"></i> </a>' . " </td>";
+
+        // ID und bisherige Notiz werden in FUnktion übergeben. Notiz wird damit beim Aufruf direkt angezeigt (-> Value)
+        echo "<td id='center'> " . '<a onclick="zeigeNotiz(' . $row["id"] . ',\'' . $row["notiz"]. '\')"><i id=\"tdicon\" class="fa fa-comment" aria-hidden="true"></i></a>' . "</td>";
 
         //Wenn Werte in "freigegeben" stehen, werden die Funktionen zeigeLink, versendeLink und Freigabe beenden angezeigt
         if ($row['freigegeben'] != NULL) {
-            echo "<td><a href='dateiFreigabeBeenden.php?id=" . $row["id"] . "'> <i id=\"tdicon\" class=\"fa fa-unlock\" aria-hidden=\"true\"></i> Freigabe beenden </a></td>";
-            echo "<td><a onclick='zeigeLink(\"".$row['freigegeben']."\")'><i id=\"tdicon\" class=\"fa fa-external-link\" aria-hidden=\"true\"></i> Link anschauen</a></td>";
-            echo "<td><a onclick='versendeLink(\"".$row['freigegeben']."\")'><i id=\"tdicon\" class=\"fa fa-envelope\" aria-hidden=\"true\"></i> Link versenden</a></td>";
+            echo "<td id='center'><a href='dateiFreigabeBeenden.php?id=" . $row["id"] . "'><i id=\"tdicon\" class=\"fa fa-unlock\" aria-hidden=\"true\"></i></a></td>";
+            echo "<td id='center'><a onclick='zeigeLink(\"".$row['freigegeben']."\")'><i id=\"tdicon\" class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td>";
+            echo "<td id='center'><a onclick='versendeLink(\"".$row['freigegeben']."\")'><i id=\"tdicon\" class=\"fa fa-envelope\" aria-hidden=\"true\"></i></a></td>";
+
         }else {
-            echo "<td><a href='dateiFreigabe.php?id=" . $row["id"] . "'> <i id=\"tdicon\" class=\"fa fa-lock\" aria-hidden=\"true\"> </i> Link freigeben</a></td>";
+            echo "<td id='center'><a href='dateiFreigabe.php?id=" . $row["id"] . "'><i id=\"tdicon\" class=\"fa fa-lock\" aria-hidden=\"true\"></i></a></td>";
             echo "<td> </td>";
             echo "<td> </td>";
         }
-           // ID und bisherige Notiz werden in FUnktion übergeben. Notiz wird damit beim Aufruf direkt angezeigt (-> Value)
-        echo "<td> " . '<a onclick="zeigeNotiz(' . $row["id"] . ',\'' . $row["notiz"]. '\')"><i id=\"tdicon\" class=\"fa fa-comment\" aria-hidden=\"true\"></i> Notiz</a>' . "</td>";
-        echo "</tr>";
+
+            echo "</tr>";
 
 
 
@@ -129,22 +137,25 @@ $statement->setFetchMode(PDO::FETCH_ASSOC);
         $mbMax = 50;
 
     }
-
+        // Variable erstellen für Prozentanzeige (Verbrauch in Relation zu mbMax)
     if ($mbGesamt > 0) {
         $prozentAnzahl = ($mbGesamt / $mbMax) * 100;
         $prozentAnzahlgerundet = round($prozentAnzahl, 0);
 }
     ?>
+
     </tbody>
 </table>
+</div>
 
 <script>
     <?php include("popupFelder.js")?>
 </script>
 
-<!-- Progess Bar, als Anzeige für die aktuellen MB-Stand -->
+<!-- Progess Bar, als Anzeige für den aktuellen MB-Stand -->
+        <br>
         <?php  if ($mbGesamt > 0){?>
-        <div> <?php echo $mbGesamt . "MB von " . $mbMax . "MB belegt" ?> </div>
+        <div id="center"><b> <?php echo $mbGesamt . "MB von " . $mbMax . "MB belegt" ?> </b></div>
         <div class="progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $mbGesamt?>"
                  aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $prozentAnzahl?>%;">

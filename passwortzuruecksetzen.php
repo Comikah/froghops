@@ -62,18 +62,7 @@ if(isset($_GET['send'])) {
     }
 }
 ?>
-<!--
-<h1>Neues Passwort vergeben</h1>
-<form action="?send=1&amp;userid=<?php //echo htmlentities($userid); ?>&amp;code=<?php //echo htmlentities($code); ?>" method="post">
-    Bitte gib ein neues Passwort ein:<br>
-    <input type="password" name="passwort"><br><br>
 
-    Passwort erneut eingeben:<br>
-    <input type="password" name="passwort2"><br><br>
-
-    <input type="submit" value="Passwort speichern">
-</form>
--->
 
 <div class="container">
     <div class="row">

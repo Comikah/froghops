@@ -41,47 +41,32 @@ if(isset($_GET['login'])) {
 
 }
 
-/*
-            if(isset($errorMessage)) {
-                echo $errorMessage;
-            }
-*/
 
 include("header.php");
 ?>
 
-<div id="jumbotron" class="jumbotron">
-    <div id="divjumbotron" class="row">
+<div class="container">
+    <div class="row">
+        <div class="col-md-3" id="loginlogo"></div>
+<div class="col-md-6" id="loginblock">
 
         <h1>FrogDrops</h1>
-        <p>Leiche deine Daten bei uns ab!</p>
+        <p>Laiche deine Daten bei uns ab!</p>
         <br>
-       <!-- <hr> -->
+       <hr>
 
         <p>Bei FrogDrops erhälst du 50MB, um deine wichtigsten Daten abzulegen.</p>
 
     </div>
-</div>
 
-<div id="jumbotron2" class="jumbotron">
-    <div class="row">
+        <div class="col-md-6" id="loginbild">
+
+        </div>
+
 
 
     </div>
 </div>
-
-<div class="container" id="mehrInfo">
-
-    <div class="row" id="zusammenfassung">
-
-        <h1></h1>
-        <p class="lead"></p>
-    </div>
-
-</div>
-
-
-
 
 
 

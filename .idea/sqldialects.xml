@@ -19,7 +19,6 @@
     <file url="file://$PROJECT_DIR$/passwortzuruecksetzen.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/profilbild_upload.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/registrieren.php" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/umbenennen.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/umbenennen2.php" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/userdata.php" dialect="MySQL" />
   </component>

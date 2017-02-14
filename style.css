@@ -1,3 +1,5 @@
+/* Menüleiste Header */
+
 .collapse.navbar-collapse{
     overflow-x: hidden;
 }
@@ -23,6 +25,27 @@
      }
  }
 
+/* Tabelle */
+
+.table {
+
+    border-style: groove;
+    border-width: medium;
+    border-color: #3E4416;
+
+}
+
+.table-container
+{
+    width: 100%;
+    overflow-y: auto;
+    _overflow: auto;
+    margin: 0 0 1em;
+}
+
+
+
+/* Background */
 #hintergrund_login{
      width: 50px;
      height: 50px;
@@ -72,9 +95,14 @@
     height: 125px;
 }
 
+/* Input File - Formular - Profibildupload*/
+#exampleInputFile{
+    width: 100%; }
+
+
 #profilbildG {
-    width: 300px;
-    height: 200px;
+    width: 80%
+
 }
 
 
@@ -113,8 +141,6 @@
 }
 
 #newsBlock{
-    position: relative;
-    left: 295px;
     margin-top: 50px;
 }
 
@@ -123,9 +149,6 @@
     width: 100%;
     height: 50%;
     background: url(Bilder/logo_frosch_bunt.png) no-repeat left;
-   /*  background-repeat: no-repeat; */
-    /*background-position: center; */
-
     background-color: #F7F9F1;
     background-size: contain;
     text-align: center;
@@ -135,12 +158,12 @@
     border-color: black;
 }
 
-#divjumbotron{
 
+#divjumbotron{
     padding-left: 350px;
 }
 
-#jumbotron2{
+#loginbild{
     width: 100%;
     height: 50%;
     /* background-image: url(Bilder/logo_frosch_bunt.png);*/
@@ -152,13 +175,29 @@
     color: white;
 }
 
-.loginkomplett{
 
-    background-color: #f8f8f6;
-    color: #f8f8f6;
+#loginlogo {
+background: url(Bilder/logo_frosch_bunt.png) no-repeat center;
+    background-size: contain;
+    height: 50%;
+
 }
 
-/* header Bootstrap */
+/* Hintergrundfarbe*/
+.loginkomplett{
+    background-color: #f8f8f6;
+
+}
+
+/* Startseite Text*/
+#loginblock{
+text-align: center;
+    font-size: large;
+    font-style: inherit;
+}
+
+
+/* header Elemente Bootstrap */
 #zusammenfassung{
     text-align: center;
 }
@@ -194,11 +233,11 @@
 
 /* Drag and Drop */
 .dropzone{
-    position: relative;
-    height: 270px;
+    height: 40%;
     background-image: url(Bilder/teich.png);
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
 
 }
 
@@ -241,7 +280,7 @@ body, html {
     text-decoration: underline;
 }
 
-/* Kontaktformular */
+/* Formulare */
 #rahmen{
     padding: 10px 10px 10px 10px;
     margin-top: 30px;
@@ -256,4 +295,9 @@ body, html {
 
 #nachrichtKontaktformular{
     width: 79%;
+}
+
+/* Pointer Maus bei Link - ELementen*/
+#dashboard #page_container table tr td i.fa {
+    cursor: pointer;
 }

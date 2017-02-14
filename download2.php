@@ -60,7 +60,7 @@
 
 $id=isset($_GET['id']) ? $_GET['id'] : die('ERROR: ID wurde nicht gefunden.');
 
-$sqli= "SELECT datei_name FROM uploads WHERE freigegeben = '$id'";
+$sqli= "SELECT datei_name FROM uploads WHERE id = '$id'";
 $statement = $pdo->prepare($sqli);
 $statement->execute();
 $statement->setFetchMode(PDO::FETCH_ASSOC);

@@ -23,7 +23,6 @@ $userid = $_SESSION['userid'];
 
     //Prüfung, ob FOrmular ausgefüllt wurde
     if(isset($_GET['pwaendern'])) {
-    $errorMessage = false;
     $passwort = $_POST['passwort'];
     $passwort2 = $_POST['passwort2'];
     $passwortNeu = $_POST['passwort3'];
@@ -31,20 +30,22 @@ $userid = $_SESSION['userid'];
 
         //Prüft ob Passwörter richtig eingegeben wurden
         if(($passwort != $passwort2) && ($passwort == $passwortNeu) ) {
-        echo 'Die Passwörter stimmen nicht überein oder das neugewählte Passwort ist unverändert! <br>';
-        $errorMessage = true;
+        //echo 'Die Passwörter stimmen nicht überein oder das neugewählte Passwort ist unverändert! <br>';
+            $_SESSION['msg'] = 'Die Passwörter stimmen nicht überein oder das neugewählte Passwort ist unverändert!';
+            $_SESSION['msg_error'] = true;
     }
 
 
 
     //Keine Fehler, wir können das Passwort ändern
-    if(!$errorMessage) {
+    //if(!$errorMessage) {
 
         $password_hash = password_hash($passwortNeu, PASSWORD_DEFAULT);
 
     $statement2 = $pdo->prepare("UPDATE users SET passwort = '".$password_hash."' WHERE user_id = '".$userid."' ");
-    $statement2->execute(array(':passwort' => $password_hash));
 
+        if ($statement2->execute(array(':passwort' => $password_hash))){
+            $_SESSION['msg'] = "Das Passwort wurde erfolgreich geändert";
 
         } else {
             $error = 'Beim Ändern ist leider ein Fehler aufgetreten <br>'.$pdo->errorInfo();
@@ -54,15 +55,18 @@ $userid = $_SESSION['userid'];
 
 }
 
+/*
 if(isset($errorMessage)) {
-    //echo $errorMessage;
+
     $_SESSION['msg'] = $errorMessage;
     $_SESSION['msg_error'] = true;
-    //echo "<a href= passwortaendern.php > Erneut eingeben </a> <br><br>";
-}
+
+}*/
 ?>
 
+
 <!-- Formular für Passwort ändern -->
+<!--
 <form action="passwortaendern.php?pwaendern=1" method="post">
     Passwort:<br>
     <input type="password" size="40" maxlength="250" name="passwort1"><br><br>
@@ -74,9 +78,44 @@ if(isset($errorMessage)) {
     <input type="submit" value="Ändern">
 
 </form>
+-->
 
 
+<div class="container">
+    <div class="row">
 
+        <!-- Formular für Passwort ändern-->
+
+        <div class="col-md-3">
+
+        </div>
+
+
+        <div class="col-md-6" id="rahmen">
+
+            <h1 class="ueberschrift" id="center"> Passwort ändern </h1>
+            <br>
+
+            <div id="rahmenInnen">
+<br>
+<form id="bildupload nachrichtKontaktformular"  action="passwortaendern.php?pwaendern=1" method="post">
+
+    <input type="password" class="form-control" id="nachrichtKontaktformular" name="passwort1" placeholder="Altes Passwort"> <br>
+
+    <input type="password" class="form-control" id="nachrichtKontaktformular"  name="passwort2" placeholder="Altes Passwort erneut eingeben"> <br>
+
+    <input type="password" class="form-control" id="nachrichtKontaktformular"  name="passwort3" placeholder="Neues Passwort"> <br>
+
+    <input class="btn btn-primary" id="submit" type="Submit" name="submit" value="Ändern">
+
+</form>
+</div>
+</div>
+</div>
+</div>
+
+
+<?php include("footer.php"); ?>
 
 </body>
 </html>

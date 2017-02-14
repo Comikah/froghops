@@ -17,7 +17,24 @@ if(!isset($_SESSION['userid'])) {
 include("header.php");
 ?>
 
-<h1> Profil von <?php echo $username ?> </h1>
+
+
+<div class="container">
+    <div class="row">
+
+        <!-- Formular für den Upload des Profilbilds-->
+
+        <div class="col-md-3">
+
+        </div>
+
+
+        <div class="col-md-6" id="rahmen">
+<h1 class="ueberschrift" id="center"> Profil von <?php echo $username ?> </h1>
+
+            <br>
+
+            <div id="rahmenInnen">
 <?php
 
 //Prüfung, ob übergebene Datei leer ist
@@ -59,7 +76,9 @@ if ( $_FILES['bild']['name']  <> "" )
                 'hochgeladenes/profile/'. $_FILES['bild']['name'] );
 
             //Aktuelle Datei vom Server löschen, bevor Neue in die Datenbank geladen wird
-            unlink($dir . "$loeschedatei");
+            if ($loeschedatei != NULL) {
+                unlink($dir . "$loeschedatei");
+            }
 
             //Neue Datei in Datenbank aktualisieren/updaten
             $sql= "UPDATE users 
@@ -138,13 +157,19 @@ function dateiname_bereinigen($dateiname)
 
 
 
-<!-- Formular für den Upload des Profilbildes -->
-<form id="bildupload" name="bildupload" enctype="multipart/form-data" action="profilbild_upload.php" method="post" >
 
-    <input id="bilder" type="file" name="bild" size="60" maxlength="255" >
-    <input type="Submit" name="submit" value="Bild hochladen">
-</form>
+          <br>
+                <form id="bildupload" name="bildupload" enctype="multipart/form-data" action="profilbild_upload.php" method="post">
 
+                    <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp" name="bild"> <br>
+
+                    <input class="btn btn-primary btn-file" id="submit" type="Submit" name="submit" value="Bild hochladen">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 include("footer.php");
